@@ -1,6 +1,6 @@
 # Lupa- ja valvontaviraston (LVV) prosessikaaviot
 
-Tämä dokumentti kuvaa Lupa- ja valvontaviraston (LVV) keskeiset asianhallintaprosessit sekvenssikaavioina. Kaaviot on toteutettu Mermaid-syntaksilla, ja ne renderöityvät suoraan GitHubin Markdown-näkymässä.
+Tämä dokumentti kuvaa Lupa- ja valvontaviraston (LVV) keskeiset prosessit sekvenssikaavioina.
 
 ## Sisällysluettelo
 1. [Rekisteriä koskeviin tietopyyntöihin vastaaminen](#1-rekisteriä-koskeviin-tietopyyntöihin-vastaaminen)
@@ -15,41 +15,41 @@ Prosessi noudattaa julkisuuslain määräaikoja. Tavanomainen julkinen tieto toi
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Pyyntaja as Tietopyytäjä
-    participant Kirjaamo as LVV Kirjaamo / Asiointi
+    actor Pyytaja as Tietopyytäjä
+    participant Asiointi as LVV Asiointi / Kirjaamo
     participant Kasittelija as LVV Asiankäsittelijä
-    participant Rekisteri as LVV Rekisteri (esim. Soteri, Astori)
+    participant Rekisteri as Soteri
 
-    Pyyntaja->>Kirjaamo: Lähettää tietopyynnön (lomake, sähköposti, posti)
-    Kirjaamo-->>Pyyntaja: Vastaanottokuittaus ja diaarinumero
-    Kirjaamo->>Kasittelija: Kirjaa ja ohjaa pyynnön käsittelyyn
+    Pyytaja->>Asiointi: Lähettää tietopyynnön (lomake, sähköposti, posti)
+    Asiointi-->>Pyytaja: Vastaanottokuittaus
+    Asiointi->>Kasittelija: Kirjaa ja ohjaa pyynnön käsittelyyn
 
     alt Pyyntö on liian yleisluontoinen
-        Kasittelija->>Pyyntaja: Pyytää täsmennystä (avustaa yksilöinnissä)
-        Pyyntaja->>Kasittelija: Toimittaa tarkennetun pyynnön
+        Kasittelija->>Pyytaja: Pyytää täsmennystä ja avustaa tarvittaessa
+        Pyytaja->>Kasittelija: Toimittaa tarkennetun pyynnön
     end
 
     Kasittelija->>Kasittelija: Tarkistaa julkisuuden, salassapidon ja käyttötarkoituksen
     
-    opt Tieto on maksullinen (esim. virallinen rekisteriote)
-        Kasittelija->>Pyyntaja: Ilmoittaa arvioidusta maksusta etukäteen
-        Pyyntaja->>Kasittelija: Hyväksyy maksun
+    opt Tieto on maksullinen
+        Kasittelija->>Pyytaja: Ilmoittaa arvioidusta maksusta etukäteen
+        Pyytaja->>Kasittelija: Hyväksyy maksun
     end
 
     Kasittelija->>Rekisteri: Tekee haun yksilöidyillä hakuehdoilla
-    Rekisteri-->>Kasittelija: Palauttaa rekisteritiedot / asiakirjat
+    Rekisteri-->>Kasittelija: Palauttaa rekisteritiedot
 
     alt Tiedot voidaan luovuttaa (kokonaan tai osittain)
-        Kasittelija->>Kasittelija: Poistaa salassa pidettävät tiedot (peittäminen)
-        Kasittelija-->>Pyyntaja: Toimittaa tiedot (turvaviesti / posti) 2 vk – 1 kk kuluessa
+        Kasittelija->>Kasittelija: Poistaa salassa pidettävät tiedot
+        Kasittelija-->>Pyytaja: Toimittaa tiedot 2 vk – 1 kk kuluessa
         opt Osa tiedoista salataan
-            Kasittelija-->>Pyyntaja: Ilmoittaa kieltäytymisen perusteen (oikeus valituskelpoiseen päätökseen)
+            Kasittelija-->>Pyytaja: Ilmoittaa kieltäytymisen perusteen
         end
     else Tietoja ei voida luovuttaa (salassapito)
-        Kasittelija-->>Pyyntaja: Antaa kieltäytymisilmoituksen
+        Kasittelija-->>Pyytaja: Antaa kieltäytymisilmoituksen
         opt Pyyntäjä vaatii virallisen päätöksen
-            Pyyntaja->>Kasittelija: Pyytää valituskelpoista päätöstä
-            Kasittelija-->>Pyyntaja: Toimittaa hallintopäätöksen ja valitusosoituksen
+            Pyytaja->>Kasittelija: Pyytää valituskelpoista päätöstä
+            Kasittelija-->>Pyytaja: Toimittaa hallintopäätöksen ja valitusosoituksen
         end
     end
 ```
@@ -95,7 +95,11 @@ sequenceDiagram
     end
 
     Esittelija->>Esittelija: Arvioi luvan edellytykset ja laatii päätösesityksen
-    Esittelija->>Ratkaisija: Esittelee asian ja toimittaa päätösluonnoksen
+    alt Esittelija hyväksyy päätösesityksen
+        Esittelija->>Esittelija: Tekee ja allekirjoittaa lupapäätöksen
+    else Esittelija esittelee asian 
+        Esittelija->>Ratkaisija: Esittelee asian ja toimittaa päätösluonnoksen
+    end
 
     alt Ratkaisija hyväksyy päätösesityksen
         Ratkaisija->>Ratkaisija: Tekee ja allekirjoittaa lupapäätöksen
