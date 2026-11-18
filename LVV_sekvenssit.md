@@ -47,7 +47,7 @@ sequenceDiagram
         end
     else Tietoja ei voida luovuttaa (salassapito)
         Kasittelija-->>Pyytaja: Antaa kieltäytymisilmoituksen
-        opt Pyyntäjä vaatii virallisen päätöksen
+        opt Pyytäjä vaatii virallisen päätöksen
             Pyytaja->>Kasittelija: Pyytää valituskelpoista päätöstä
             Kasittelija-->>Pyytaja: Toimittaa hallintopäätöksen ja valitusosoituksen
         end
@@ -70,25 +70,25 @@ Lupahakemusten käsittely noudattaa hallintolakia. Päätöksenteossa sovelletaa
 sequenceDiagram
     autonumber
     actor Hakija as Luvan hakija
-    participant Asiointi as Sähköinen asiointi / Kirjaamo
-    participant Esittelija as LVV Esittelijä (Ylitarkastaja)
+    participant Asiointi as LVV asiointi / Kirjaamo
+    participant Esittelija as LVV Esittelijä
     participant Sidosryhmat as Lausunnonantajat / Asianosaiset
-    participant Ratkaisija as LVV Ratkaisija (Johtaja / Päällikkö)
-    participant Rekisteri as LVV Rekisteri & Laskutus
+    participant Ratkaisija as LVV Ratkaisija
+    participant Rekisteri as LVV Rekisteri ja Laskutus
 
     Hakija->>Asiointi: Lähettää lupahakemuksen ja liitteet
-    Asiointi-->>Hakija: Vastaanottokuittaus ja diaarinumero
-    Asiointi->>Esittelija: Kirjaa ja jakaa hakemuksen valmisteluun
+    Asiointi-->>Hakija: Vastaanottokuittaus
+    Asiointi->>Esittelija: Kirjaa hakemuksen ja jakaa sen valmisteluun
 
     opt Hakemus on puutteellinen
-        Esittelija->>Hakija: Lähettää täydennyspyynnön (määräaika)
+        Esittelija->>Hakija: Lähettää täydennyspyynnön ja ohjeistaa
         Hakija->>Esittelija: Toimittaa puuttuvat selvitykset
     end
 
-    opt Lausunnot, kuuleminen tai tarkastus tarpeen
-        Esittelija->>Sidosryhmat: Pyytää lausunnot / varaa tilaisuuden kuulemiseen
+    opt Lausunnot tai tarkastus tarpeen
+        Esittelija->>Sidosryhmat: Pyytää lausunnot
         Sidosryhmat-->>Esittelija: Toimittavat lausunnot ja muistutukset
-        opt Hakijan kuuleminen vastineista
+        opt Hakijan kuuleminen
             Esittelija->>Hakija: Varaa tilaisuuden antaa selitys
             Hakija->>Esittelija: Toimittaa vastineen
         end
@@ -97,9 +97,10 @@ sequenceDiagram
     Esittelija->>Esittelija: Arvioi luvan edellytykset ja laatii päätösesityksen
     alt Esittelija hyväksyy päätösesityksen
         Esittelija->>Esittelija: Tekee ja allekirjoittaa lupapäätöksen
-    else Esittelija esittelee asian 
-        Esittelija->>Ratkaisija: Esittelee asian ja toimittaa päätösluonnoksen
     end
+    
+    Esittelija esittelee asian 
+    Esittelija->>Ratkaisija: Esittelee asian ja toimittaa päätösluonnoksen
 
     alt Ratkaisija hyväksyy päätösesityksen
         Ratkaisija->>Ratkaisija: Tekee ja allekirjoittaa lupapäätöksen
