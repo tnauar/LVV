@@ -97,10 +97,9 @@ sequenceDiagram
     Esittelija->>Esittelija: Arvioi luvan edellytykset ja laatii päätösesityksen
     alt Esittelija hyväksyy päätösesityksen
         Esittelija->>Esittelija: Tekee ja allekirjoittaa lupapäätöksen
+    else Esittelija esittelee asian 
+        Esittelija->>Ratkaisija: Esittelee asian ja toimittaa päätösluonnoksen
     end
-    
-    Esittelija esittelee asian 
-    Esittelija->>Ratkaisija: Esittelee asian ja toimittaa päätösluonnoksen
 
     alt Ratkaisija hyväksyy päätösesityksen
         Ratkaisija->>Ratkaisija: Tekee ja allekirjoittaa lupapäätöksen
