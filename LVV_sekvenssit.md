@@ -97,6 +97,7 @@ sequenceDiagram
     Esittelija->>Esittelija: Arvioi luvan edellytykset ja laatii päätösesityksen
     alt Esittelija hyväksyy päätösesityksen
         Esittelija->>Esittelija: Tekee ja allekirjoittaa lupapäätöksen
+        Esittelija->>Rekisteri: Tallentaa päätöksen rekisteriin ja käynnistää laskutuksen    
     else Esittelija esittelee asian 
         Esittelija->>Ratkaisija: Esittelee asian ja toimittaa päätösluonnoksen
     end
